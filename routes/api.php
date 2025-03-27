@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 //     //     'name' => 'Abigail',
 //     //     'state' => 'CA',
 //     // ]);    
-//     return User::all();
 //     // return $request->user();
 // });
 
