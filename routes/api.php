@@ -5,15 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-// Route::get('/user', function (Request $request) {
-//     // return response()->json([
-//     //     'name' => 'Abigail',
-//     //     'state' => 'CA',
-//     // ]);    
-//     return User::all();
-//     // return $request->user();
-// });
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return response()->json(['user' => $request->user()]);
 });
