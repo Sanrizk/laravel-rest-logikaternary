@@ -33,6 +33,8 @@ class UserController extends Controller
             'password' => 'required'
         ]);
 
+        dd($request);
+
         if (Auth::attempt($credentials)) {
             return redirect('/token');
         }

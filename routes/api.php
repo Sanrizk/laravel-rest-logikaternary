@@ -6,36 +6,39 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return response()->json(['user' => $request->user()]);
+  return response()->json(['user' => $request->user()]);
 });
+// Route::get('/user', function (Request $request) {
+//   return response()->json(['user' => $request->user()]);
+// });
 
 Route::post('/login', function (Request $request) {
-    $credentials = $request->validate([
-        'email' => 'required|email',
-        'password' => 'required'
-    ]);
+  $credentials = $request->validate([
+    'email' => 'required|email',
+    'password' => 'required'
+  ]);
 
-    if (!Auth::attempt($credentials)) {
-        return response()->json(['message' => 'Unauthorized'], 401);
-    }
+  if (!Auth::attempt($credentials)) {
+    return response()->json(['message' => 'Unauthorized'], 401);
+  }
 
-    $user = Auth::user()->username;
-    $token = $request->user()->createToken('authToken')->plainTextToken;
+  $user = Auth::user()->username;
+  $token = $request->user()->createToken('authToken')->plainTextToken;
 
-    return response()->json(['token' => $token, 'user' => $user]);
+  return response()->json(['token' => $token, 'user' => $user]);
 });
 
-Route::get('/auth/check', function () {
-    return Auth::user();
-});
+// Route::get('/auth/check', function () {
+//     return Auth::user();
+// });
 
-Route::get('/key', function() {
-    $arrJson = [
-        [
-            'api_key' => env('APP_API_KEY')
-        ],
-    ];
-    
-    json_encode(json_encode($arrJson));
-    return $arrJson;
-});
+// Route::get('/key', function () {
+//   $arrJson = [
+//     [
+//       'api_key' => env('APP_API_KEY')
+//     ],
+//   ];
+
+//   json_encode(json_encode($arrJson));
+//   return $arrJson;
+// });
