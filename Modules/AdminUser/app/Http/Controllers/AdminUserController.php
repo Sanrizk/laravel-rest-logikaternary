@@ -1,30 +1,25 @@
 <?php
 
-namespace Modules\User\Http\Controllers;
+namespace Modules\AdminUser\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Modules\User\Models\User;
 
-
-class UserController extends Controller
+class AdminUserController extends Controller
 {
     public function showLogin() {
         return view('login');
     }
-
     public function login(Request $request) {
         $credentials = $request->validate([
-            'email' => 'required|email',
+            'username' => 'required',
             'password' => 'required'
         ]);
-
-        if (Auth::attempt($credentials)) {
+        
+        if (Auth::guard('admin')->attempt($credentials)) {
             return redirect('/token');
-        } 
-
+        }
         return back()->withErrors(['email' => 'Email atau password salah.']);
     }
     /**
@@ -32,45 +27,28 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('user::index');
+        return view('adminuser::index');
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function showRegister()
+    public function create()
     {
-        return view('register');
+        return view('adminuser::create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function register(Request $request) {
-        $request->validate([
-            'fullname' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6'
-        ]);
-
-        User::create([
-            'username' => 'johndoe421',
-            'fullname' => $request->fullname,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'pointBalance' => 0,
-        ]); 
-
-        return redirect('/login')->with('success', 'Akun berhasil dibuat. Silakan login.');
-    }
+    public function store(Request $request) {}
 
     /**
      * Show the specified resource.
      */
-    
     public function show($id)
     {
-        return view('user::show');
+        return view('adminuser::show');
     }
 
     /**
@@ -78,7 +56,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        return view('user::edit');
+        return view('adminuser::edit');
     }
 
     /**
