@@ -20,7 +20,7 @@ class AdminUserController extends Controller
         if (Auth::guard('admin')->attempt($credentials)) {
             return redirect('/token');
         }
-        return back()->withErrors(['email' => 'Email atau password salah.']);
+        return back()->withErrors(['username' => 'Username atau password salah.']);
     }
     /**
      * Display a listing of the resource.

@@ -8,7 +8,7 @@
 <body>
     
     <h1>GEN TOKEN</h1>
-    {{ auth()->user()->name }}
+    {{-- {{ auth()->user()->name }} --}}
     <form action="/tokens/create" method="POST">
         @csrf
         <label for="name">Token Name</label>
