@@ -10,5 +10,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/login', [UserController::class, 'showLogin'])->name('login');
 Route::post('/login', [UserController::class, 'login']);
 
+Route::post('/logout', [UserController::class, 'logout']);
+
 Route::get('/register', [UserController::class, 'showRegister'])->name('register');
 Route::post('/register', [UserController::class, 'register']);
