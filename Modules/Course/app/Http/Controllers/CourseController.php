@@ -4,15 +4,30 @@ namespace Modules\Course\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\Course\Models\Course;
 
 class CourseController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('course::index');
+        // return view('course::index');
+        $response = [
+            "message" => "Bad Request",
+            "status" => 400
+        ];
+        
+        if($request->header('x-api-key') == env('APP_API_KEY')) {
+            $response = [
+                "data" => Course::all(),
+                "message" => "Success",
+                "status" => 200
+            ];
+        }
+
+        return response()->json($response, $response["status"]);
     }
 
     /**
@@ -26,14 +41,49 @@ class CourseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {}
+    public function store(Request $request) {
+        $response = [
+            "message" => "Bad Request",
+            "status" => 400
+        ];
+
+        if($request->header('x-api-key') == env('APP_API_KEY')) {
+            $data = $request->validate([
+                "title" => "required|max:255",
+                "description" => "required|max:255",
+                "requiredPoints" => "required",
+            ]);
+            Course::create($data);
+
+            $response = [
+                "message" => "Success",
+                "status" => 200
+            ];
+        }
+
+        return response()->json($response, $response["status"]);
+    }
 
     /**
      * Show the specified resource.
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        return view('course::show');
+        // return view('course::show');
+        $response = [
+            "message" => "Bad Request",
+            "status" => 400
+        ];
+        
+        if($request->header('x-api-key') == env('APP_API_KEY')) {
+            $response = [
+                "data" => Course::find($id),
+                "message" => "Success",
+                "status" => 200
+            ];
+        }
+
+        return response()->json($response, $response["status"]);
     }
 
     /**
