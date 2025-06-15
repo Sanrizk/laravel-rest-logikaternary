@@ -97,10 +97,50 @@ class CourseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id) {}
+    public function update(Request $request, $id) {
+
+        $response = [
+            "message" => "Bad Request",
+            "status" => 400
+        ];
+
+        if($request->header('x-api-key') == env('APP_API_KEY')) {
+
+            Course::where('id', $id)->update([
+                "title" => $request["title"],
+                "description" => $request["description"],
+                "requiredPoints" => $request["requiredPoints"]
+            ]);
+
+            $response = [
+                "message" => "Success",
+                "status" => 200
+            ];
+        }
+
+        return response()->json($response, $response["status"]);
+    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id) {}
+    public function destroy(Request $request, $id) {
+        $response = [
+            "message" => "Bad Request",
+            "status" => 400
+        ];
+
+        if($request->header('x-api-key') == env('APP_API_KEY')) {
+
+            $data = Course::find($id);
+            $data->delete();
+
+            $response = [
+                "message" => "Success",
+                "status" => 200
+            ];
+        }
+
+        return response()->json($response, $response["status"]);
+    }
 }
