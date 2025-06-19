@@ -25,6 +25,7 @@ class UserController extends Controller
 
         if (Auth::attempt($credentials)) {
             return redirect('/token');
+            // return redirect('http://localhost:5173/');
         }
 
         return back()->withErrors(['email' => 'Email atau password salah.']);
