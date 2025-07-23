@@ -4,7 +4,7 @@ namespace Modules\Course\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-// use Modules\Course\Database\Factories\CourseFactory;
+use Modules\Course\Database\Factories\CourseFactory;
 
 class Course extends Model
 {
@@ -13,12 +13,14 @@ class Course extends Model
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = ['id', 'title', 'description', 'requiredPoints'];
+    protected $fillable = ['id', 'title', 'description', 'price'];
 
     protected $hidden = ['created_at', 'updated_at'];
 
-    // protected static function newFactory(): CourseFactory
-    // {
-    //     // return CourseFactory::new();
-    // }
+    protected $guarded = [''];
+
+    protected static function newFactory(): CourseFactory
+    {
+        return CourseFactory::new();
+    }
 }

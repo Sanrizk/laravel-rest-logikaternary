@@ -11,13 +11,21 @@ class CourseController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    private $response = [
+        "message" => "Bad Request",
+        "status" => 400
+    ]; 
+
     public function index(Request $request)
     {
         // return view('course::index');
-        $response = [
-            "message" => "Bad Request",
-            "status" => 400
-        ];
+        // $response = [
+        //     "message" => "Bad Request",
+        //     "status" => 400
+        // ];
+
+        $response = $this->response;
         
         if($request->header('x-api-key') == env('APP_API_KEY')) {
             $response = [
@@ -42,16 +50,13 @@ class CourseController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request) {
-        $response = [
-            "message" => "Bad Request",
-            "status" => 400
-        ];
+        $response = $this->response;
 
         if($request->header('x-api-key') == env('APP_API_KEY')) {
             $data = $request->validate([
                 "title" => "required|max:255",
                 "description" => "required|max:255",
-                "requiredPoints" => "required",
+                "price" => "required",
             ]);
             Course::create($data);
 
@@ -70,10 +75,7 @@ class CourseController extends Controller
     public function show(Request $request, $id)
     {
         // return view('course::show');
-        $response = [
-            "message" => "Bad Request",
-            "status" => 400
-        ];
+        $response = $this->response;
         
         if($request->header('x-api-key') == env('APP_API_KEY')) {
             $response = [
@@ -99,17 +101,14 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id) {
 
-        $response = [
-            "message" => "Bad Request",
-            "status" => 400
-        ];
+        $response = $this->response;
 
         if($request->header('x-api-key') == env('APP_API_KEY')) {
 
             Course::where('id', $id)->update([
                 "title" => $request["title"],
                 "description" => $request["description"],
-                "requiredPoints" => $request["requiredPoints"]
+                "price" => $request["price"]
             ]);
 
             $response = [
@@ -125,10 +124,7 @@ class CourseController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Request $request, $id) {
-        $response = [
-            "message" => "Bad Request",
-            "status" => 400
-        ];
+        $response = $this->response;
 
         if($request->header('x-api-key') == env('APP_API_KEY')) {
 
