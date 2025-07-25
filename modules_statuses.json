@@ -1,7 +1,6 @@
 {
     "User": true,
     "Course": true,
-    "AdminCourse": true,
-    "AdminUsers": true,
-    "AdminUser": true
+    "AdminUser": true,
+    "Post": true
 }
