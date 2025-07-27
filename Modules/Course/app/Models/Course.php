@@ -4,7 +4,9 @@ namespace Modules\Course\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Course\Database\Factories\CourseFactory;
+use Modules\Course\Models\Lesson;
 
 class Course extends Model
 {
@@ -22,5 +24,9 @@ class Course extends Model
     protected static function newFactory(): CourseFactory
     {
         return CourseFactory::new();
+    }
+
+    public function lessons(): HasMany {
+        return $this->hasMany(Lesson::class, 'course_id');
     }
 }
