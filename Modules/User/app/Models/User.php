@@ -4,7 +4,7 @@ namespace Modules\User\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-// use Modules\User\Database\Factories\UserFactory;
+use Modules\User\Database\Factories\UserFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -21,7 +21,7 @@ class User extends Model
         'fullname',
         'email',
         'password',
-        'pointBalance',
+        'point_balance',
     ];
 
     protected $hidden = [
@@ -41,8 +41,8 @@ class User extends Model
         ];
     }
 
-    // protected static function newFactory(): UserFactory
-    // {
-    //     // return UserFactory::new();
-    // }
+    protected static function newFactory(): UserFactory
+    {
+        return UserFactory::new();
+    }
 }
