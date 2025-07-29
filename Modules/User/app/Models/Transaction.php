@@ -13,8 +13,8 @@ class Transaction extends Model
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = ['user_id', 'amount', 'status', 'description'];
-    protected $hidden = ['user_id'];
+    protected $fillable = ['user_id', 'course_id', 'amount', 'status', 'description'];
+    // protected $hidden = ['user_id'];
 
     protected static function newFactory(): TransactionFactory
     {

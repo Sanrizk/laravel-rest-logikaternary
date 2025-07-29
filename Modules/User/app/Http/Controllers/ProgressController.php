@@ -4,15 +4,32 @@ namespace Modules\User\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\User\Models\Progress;
 
 class ProgressController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+
+    private $response = [
+        "message" => "Bad Request",
+        "status" => 400
+    ]; 
+
+    public function index(Request $request)
     {
-        return view('user::index');
+        $response = $this->response;
+        
+        if($request->header('x-api-key') == env('APP_API_KEY')) {
+            $response = [
+                "data" => Progress::all(),
+                "message" => "Success",
+                "status" => 200
+            ];
+        }
+
+        return response()->json($response, $response["status"]);
     }
 
     /**
@@ -26,14 +43,43 @@ class ProgressController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {}
+    public function store(Request $request) {
+        $response = $this->response;
+
+        if($request->header('x-api-key') == env('APP_API_KEY')) {
+            $data = $request->validate([
+                "transaction_id" => "required|integer",
+                "lesson_id" => "required|integer",
+                "progress" => "required|integer",
+                "progress_timestamp" => "required|integer",
+            ]);
+            Progress::create($data);
+
+            $response = [
+                "message" => "Success",
+                "status" => 200
+            ];
+        }
+
+        return response()->json($response, $response["status"]);
+    }
 
     /**
      * Show the specified resource.
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        return view('user::show');
+        $response = $this->response;
+        
+        if($request->header('x-api-key') == env('APP_API_KEY')) {
+            $response = [
+                "data" => Progress::find($id),
+                "message" => "Success",
+                "status" => 200
+            ];
+        }
+
+        return response()->json($response, $response["status"]);
     }
 
     /**
@@ -47,10 +93,44 @@ class ProgressController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id) {}
+    public function update(Request $request, $id) {
+        $response = $this->response;
+
+        if($request->header('x-api-key') == env('APP_API_KEY')) {
+
+            Progress::where('id', $id)->update([
+                "transaction_id" => $request["transaction_id"],
+                "lesson_id" => $request["lesson_id"],
+                "progress" => $request["progress"],
+                "progress_timestamp" => $request["progress_timestamp"],
+            ]);
+
+            $response = [
+                "message" => "Success",
+                "status" => 200
+            ];
+        }
+
+        return response()->json($response, $response["status"]);
+    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id) {}
+    public function destroy(Request $request, $id) {
+        $response = $this->response;
+
+        if($request->header('x-api-key') == env('APP_API_KEY')) {
+
+            $data = Progress::find($id);
+            $data->delete();
+
+            $response = [
+                "message" => "Success",
+                "status" => 200
+            ];
+        }
+
+        return response()->json($response, $response["status"]);
+    }
 }

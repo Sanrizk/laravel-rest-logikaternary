@@ -21,6 +21,7 @@ class TransactionFactory extends Factory
 
         return [
             "user_id" => 1,
+            "course_id" => 1,
             "amount" => rand(200,2000),
             "status" => $status[rand(0,count($status)-1)],
             "description" => fake()->text

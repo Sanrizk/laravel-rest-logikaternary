@@ -19,8 +19,8 @@ class UserDatabaseSeeder extends Seeder
         User::factory()->count(5)->create();
 
         $this->call([
+            TransactionDatabaseSeeder::class,
             ProgressDatabaseSeeder::class,
-            TransactionDatabaseSeeder::class
         ]);
     }
 }

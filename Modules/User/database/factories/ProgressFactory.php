@@ -17,10 +17,9 @@ class ProgressFactory extends Factory
     public function definition(): array
     {
         return [
-            "user_id" => 1,
-            "content_id" => 1,
+            "transaction_id" => 1,
             "lesson_id" => 1,
-            "completion_status" => rand(10,100),
+            "progress" => rand(10,100),
             "progress_timestamp" => rand(1, 10000),
         ];
     }

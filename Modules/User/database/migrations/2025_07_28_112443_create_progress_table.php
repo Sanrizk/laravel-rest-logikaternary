@@ -13,13 +13,11 @@ return new class extends Migration
     {
         Schema::create('progress', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('content_id');
-            $table->foreign('content_id')->references('id')->on('contents');
+            $table->unsignedBigInteger('transaction_id');
+            $table->foreign('transaction_id')->references('id')->on('transactions');
             $table->unsignedBigInteger('lesson_id');
             $table->foreign('lesson_id')->references('id')->on('lessons');
-            $table->integer('completion_status');
+            $table->integer('progress');
             $table->integer('progress_timestamp');
             $table->timestamps();
         });

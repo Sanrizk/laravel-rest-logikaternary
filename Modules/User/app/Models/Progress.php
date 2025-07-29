@@ -13,7 +13,7 @@ class Progress extends Model
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = ['user_id', 'content_id', 'lesson_id', 'completion_status', 'progress_timestamp'];
+    protected $fillable = ['transaction_id', 'lesson_id', 'progress', 'completion_status', 'progress_timestamp'];
 
     protected static function newFactory(): ProgressFactory
     {
