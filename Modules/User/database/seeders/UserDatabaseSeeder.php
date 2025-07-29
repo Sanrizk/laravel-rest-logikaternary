@@ -6,6 +6,8 @@ use Illuminate\Database\Seeder;
 
 use Modules\User\Database\Seeders\ProgressDatabaseSeeder;
 use Modules\User\Database\Seeders\TransactionDatabaseSeeder;
+use Modules\User\Database\Seeders\ForumDatabaseSeeder;
+use Modules\User\Database\Seeders\ReplyDatabaseSeeder;
 
 use Modules\User\Models\User;
 
@@ -21,6 +23,8 @@ class UserDatabaseSeeder extends Seeder
         $this->call([
             TransactionDatabaseSeeder::class,
             ProgressDatabaseSeeder::class,
+            ForumDatabaseSeeder::class,
+            ReplyDatabaseSeeder::class
         ]);
     }
 }
