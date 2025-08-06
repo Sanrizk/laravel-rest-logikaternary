@@ -20,11 +20,11 @@ Route::get('/token', function () {
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-Route::post('/tokens/create', function (Request $request) {
-    $token = $request->user()->createToken($request->token_name);
+// Route::post('/tokens/create', function (Request $request) {
+//     $token = $request->user()->createToken($request->token_name);
  
-    return ['token' => $token->plainTextToken];
-});
+//     return ['token' => $token->plainTextToken];
+// });
 
 
 // Route::get('/login', [UserController::class, 'showLogin'])->name('login');

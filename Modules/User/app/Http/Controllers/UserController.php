@@ -11,11 +11,13 @@ use Modules\User\Models\User;
 
 class UserController extends Controller
 {
-    public function showLogin() {
+    public function showLogin()
+    {
         return view('login');
     }
 
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
@@ -23,9 +25,20 @@ class UserController extends Controller
 
         if (Auth::attempt($credentials)) {
             return redirect('/token');
-        } 
+            // return redirect('http://localhost:5173/');
+        }
 
         return back()->withErrors(['email' => 'Email atau password salah.']);
+    }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/login');
     }
     /**
      * Display a listing of the resource.
@@ -46,7 +59,8 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function register(Request $request) {
+    public function register(Request $request)
+    {
         $request->validate([
             'fullname' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
@@ -59,7 +73,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'pointBalance' => 0,
-        ]); 
+        ]);
 
         return redirect('/login')->with('success', 'Akun berhasil dibuat. Silakan login.');
     }
@@ -67,7 +81,7 @@ class UserController extends Controller
     /**
      * Show the specified resource.
      */
-    
+
     public function show($id)
     {
         return view('user::show');

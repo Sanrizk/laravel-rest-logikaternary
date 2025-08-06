@@ -4,6 +4,13 @@ namespace Modules\User\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
+use Modules\User\Database\Seeders\ProgressDatabaseSeeder;
+use Modules\User\Database\Seeders\TransactionDatabaseSeeder;
+use Modules\User\Database\Seeders\ForumDatabaseSeeder;
+use Modules\User\Database\Seeders\ReplyDatabaseSeeder;
+
+use Modules\User\Models\User;
+
 class UserDatabaseSeeder extends Seeder
 {
     /**
@@ -11,6 +18,13 @@ class UserDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+        User::factory()->count(5)->create();
+
+        $this->call([
+            TransactionDatabaseSeeder::class,
+            ProgressDatabaseSeeder::class,
+            ForumDatabaseSeeder::class,
+            ReplyDatabaseSeeder::class
+        ]);
     }
 }
