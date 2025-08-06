@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 // use Modules\AdminUser\Database\Factories\AdminUserFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Modules\Course\Models\Lesson;
+use Modules\Post\Models\Post;
 
 class AdminUser extends Authenticatable
 {
@@ -21,6 +22,11 @@ class AdminUser extends Authenticatable
         'password',
     ];
 
+    protected $hidden = [
+        'password',
+        'admin_role'
+    ];
+
     // protected static function newFactory(): AdminUserFactory
     // {
     //     // return AdminUserFactory::new();
@@ -28,5 +34,8 @@ class AdminUser extends Authenticatable
 
     public function lessons(): HasMany {
         return $this->hasMany(Lesson::class, 'menthor_id');
+    }
+    public function posts(): HasMany {
+        return $this->hasMany(Post::class, 'methor_id', 'id');
     }
 }
