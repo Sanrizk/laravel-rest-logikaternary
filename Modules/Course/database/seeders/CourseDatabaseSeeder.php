@@ -3,6 +3,10 @@
 namespace Modules\Course\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Modules\Course\Models\Course;
+use Modules\Course\Database\Seeders\LessonDatabaseSeeder;
+use Modules\Course\Database\Seeders\TopicDatabaseSeeder;
+use Modules\Course\Database\Seeders\ContentDatabaseSeeder;
 
 class CourseDatabaseSeeder extends Seeder
 {
@@ -11,6 +15,12 @@ class CourseDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+        Course::factory()->count(10)->create();
+        
+        $this->call([
+            LessonDatabaseSeeder::class,
+            TopicDatabaseSeeder::class,
+            ContentDatabaseSeeder::class
+        ]);
     }
 }

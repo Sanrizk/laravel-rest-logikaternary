@@ -4,9 +4,9 @@ namespace Modules\Course\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Modules\Course\Models\Course;
+use Modules\Course\Models\Lesson;
 
-class CourseController extends Controller
+class LessonController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,23 +14,17 @@ class CourseController extends Controller
 
     private $response = [
         "message" => "Bad Request",
-        "status" => 400
-    ]; 
+        "status" => 400,
+    ];
 
     public function index(Request $request)
     {
-        // return view('course::index');
-        // $response = [
-        //     "message" => "Bad Request",
-        //     "status" => 400
-        // ];
-
         $response = $this->response;
-        
+
         if($request->header('x-api-key') == env('APP_API_KEY')) {
             $response = [
-                "data" => Course::all(),
-                "message" => "Success",
+                "data" => Lesson::with(['course', 'menthor'])->get(),
+                "message" => "success",
                 "status" => 200
             ];
         }
@@ -54,16 +48,19 @@ class CourseController extends Controller
 
         if($request->header('x-api-key') == env('APP_API_KEY')) {
             $data = $request->validate([
-                "title" => "required|max:255",
+                "title" => "required|max:55",
                 "description" => "required|max:255",
-                "price" => "required",
+                "price" => "required|integer",
+                "course_id" => "required|integer",
+                "menthor_id" => "required|integer"
             ]);
-            Course::create($data);
+
+            Lesson::create($data);
 
             $response = [
-                "message" => "Success",
+                "message" => "success",
                 "status" => 200
-            ];
+            ];            
         }
 
         return response()->json($response, $response["status"]);
@@ -74,13 +71,16 @@ class CourseController extends Controller
      */
     public function show(Request $request, $id)
     {
-        // return view('course::show');
         $response = $this->response;
         
         if($request->header('x-api-key') == env('APP_API_KEY')) {
+            $data = Lesson::find($id);
+            $data["course"] = Lesson::find($id)->course["title"];
+            $data["menthor"] = Lesson::find($id)->menthor["admin_name"];
+
             $response = [
-                "data" => Course::find($id),
-                "message" => "Success",
+                "data" => $data,
+                "message" => "success",
                 "status" => 200
             ];
         }
@@ -100,24 +100,24 @@ class CourseController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id) {
-
         $response = $this->response;
 
         if($request->header('x-api-key') == env('APP_API_KEY')) {
-
-            Course::where('id', $id)->update([
-                "title" => $request["title"],
-                "description" => $request["description"],
-                "price" => $request["price"]
+            Lesson::find($id)->update([
+                'title' => $request["title"],
+                'description' => $request["description"],
+                'price' => $request["price"],
+                'course_id' => $request["course_id"],
+                'menthor_id' => $request["menthor_id"],
             ]);
 
             $response = [
-                "message" => "Success",
+                "message" => "success",
                 "status" => 200
             ];
         }
 
-        return response()->json($response, $response["status"]);
+        return response()->json($response, $response["status"]);        
     }
 
     /**
@@ -127,16 +127,15 @@ class CourseController extends Controller
         $response = $this->response;
 
         if($request->header('x-api-key') == env('APP_API_KEY')) {
-
-            $data = Course::find($id);
+            $data = Lesson::find($id);
             $data->delete();
 
             $response = [
-                "message" => "Success",
+                "message" => "success",
                 "status" => 200
             ];
         }
 
-        return response()->json($response, $response["status"]);
+        return response()->json($response, $response["status"]);    
     }
 }

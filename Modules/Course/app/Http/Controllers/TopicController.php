@@ -4,38 +4,34 @@ namespace Modules\Course\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Modules\Course\Models\Course;
+use Modules\Course\Models\Topic;
 
-class CourseController extends Controller
+class TopicController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
 
-    private $response = [
+     private $response = [
         "message" => "Bad Request",
-        "status" => 400
-    ]; 
-
+        "status" => 400,
+    ];
+    
     public function index(Request $request)
     {
         // return view('course::index');
-        // $response = [
-        //     "message" => "Bad Request",
-        //     "status" => 400
-        // ];
-
         $response = $this->response;
-        
+
         if($request->header('x-api-key') == env('APP_API_KEY')) {
             $response = [
-                "data" => Course::all(),
-                "message" => "Success",
+                "data" => Topic::with('lesson')->get(),
+                "message" => "success",
                 "status" => 200
             ];
         }
 
         return response()->json($response, $response["status"]);
+
     }
 
     /**
@@ -54,16 +50,16 @@ class CourseController extends Controller
 
         if($request->header('x-api-key') == env('APP_API_KEY')) {
             $data = $request->validate([
-                "title" => "required|max:255",
-                "description" => "required|max:255",
-                "price" => "required",
+                "topic_name" => "required|max:55",
+                "lesson_id" => "required|integer"
             ]);
-            Course::create($data);
+
+            Topic::create($data);
 
             $response = [
-                "message" => "Success",
+                "message" => "success",
                 "status" => 200
-            ];
+            ];            
         }
 
         return response()->json($response, $response["status"]);
@@ -74,13 +70,16 @@ class CourseController extends Controller
      */
     public function show(Request $request, $id)
     {
-        // return view('course::show');
         $response = $this->response;
+
         
         if($request->header('x-api-key') == env('APP_API_KEY')) {
+            $data = Topic::find($id);
+            $data["lesson"] = Topic::find($id)->lesson["title"];
+
             $response = [
-                "data" => Course::find($id),
-                "message" => "Success",
+                "data" => $data,
+                "message" => "success",
                 "status" => 200
             ];
         }
@@ -100,24 +99,21 @@ class CourseController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id) {
-
         $response = $this->response;
 
         if($request->header('x-api-key') == env('APP_API_KEY')) {
-
-            Course::where('id', $id)->update([
-                "title" => $request["title"],
-                "description" => $request["description"],
-                "price" => $request["price"]
+            Topic::find($id)->update([
+                'topic_name' => $request["topic_name"],
+                'lesson_id' => $request["lesson_id"],
             ]);
 
             $response = [
-                "message" => "Success",
+                "message" => "success",
                 "status" => 200
             ];
         }
 
-        return response()->json($response, $response["status"]);
+        return response()->json($response, $response["status"]);        
     }
 
     /**
@@ -127,16 +123,15 @@ class CourseController extends Controller
         $response = $this->response;
 
         if($request->header('x-api-key') == env('APP_API_KEY')) {
-
-            $data = Course::find($id);
+            $data = Topic::find($id);
             $data->delete();
 
             $response = [
-                "message" => "Success",
+                "message" => "success",
                 "status" => 200
             ];
         }
 
-        return response()->json($response, $response["status"]);
+        return response()->json($response, $response["status"]);    
     }
 }

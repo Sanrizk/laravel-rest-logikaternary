@@ -4,9 +4,13 @@ namespace Modules\Course\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\Course\Models\Content;
+
+use Modules\Course\Models\Lesson;
+use Modules\Course\Models\Topic;
 use Modules\Course\Models\Course;
 
-class CourseController extends Controller
+class ContentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,23 +18,17 @@ class CourseController extends Controller
 
     private $response = [
         "message" => "Bad Request",
-        "status" => 400
-    ]; 
+        "status" => 400,
+    ];
 
     public function index(Request $request)
     {
-        // return view('course::index');
-        // $response = [
-        //     "message" => "Bad Request",
-        //     "status" => 400
-        // ];
-
         $response = $this->response;
-        
+
         if($request->header('x-api-key') == env('APP_API_KEY')) {
             $response = [
-                "data" => Course::all(),
-                "message" => "Success",
+                "data" => Content::with('topic')->get(),
+                "message" => "success",
                 "status" => 200
             ];
         }
@@ -54,16 +52,17 @@ class CourseController extends Controller
 
         if($request->header('x-api-key') == env('APP_API_KEY')) {
             $data = $request->validate([
-                "title" => "required|max:255",
-                "description" => "required|max:255",
-                "price" => "required",
+                "topic_id" => "required|integer",
+                "title" => "required|max:55",
+                "content" => "required|max:255"
             ]);
-            Course::create($data);
+
+            Content::create($data);
 
             $response = [
-                "message" => "Success",
+                "message" => "success",
                 "status" => 200
-            ];
+            ];            
         }
 
         return response()->json($response, $response["status"]);
@@ -74,13 +73,15 @@ class CourseController extends Controller
      */
     public function show(Request $request, $id)
     {
-        // return view('course::show');
         $response = $this->response;
         
         if($request->header('x-api-key') == env('APP_API_KEY')) {
+            $data = Content::find($id);
+            $data["topic"] = Content::find($id)->topic["topic_name"];
+
             $response = [
-                "data" => Course::find($id),
-                "message" => "Success",
+                "data" => $data,
+                "message" => "success",
                 "status" => 200
             ];
         }
@@ -100,19 +101,17 @@ class CourseController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id) {
-
         $response = $this->response;
 
         if($request->header('x-api-key') == env('APP_API_KEY')) {
-
-            Course::where('id', $id)->update([
-                "title" => $request["title"],
-                "description" => $request["description"],
-                "price" => $request["price"]
+            Content::find($id)->update([
+                'topic_id' => $request["topic_id"],
+                'title' => $request["title"],
+                'content' => $request["content"],
             ]);
 
             $response = [
-                "message" => "Success",
+                "message" => "success",
                 "status" => 200
             ];
         }
@@ -127,14 +126,46 @@ class CourseController extends Controller
         $response = $this->response;
 
         if($request->header('x-api-key') == env('APP_API_KEY')) {
-
-            $data = Course::find($id);
+            $data = Content::find($id);
             $data->delete();
 
             $response = [
-                "message" => "Success",
+                "message" => "success",
                 "status" => 200
             ];
+        }
+
+        return response()->json($response, $response["status"]);    
+    }
+
+    public function show_course(Request $request, $id) {
+        $response = $this->response;
+
+        if($request->header('x-api-key') == env('APP_API_KEY')) {
+            // $data = Content::find($id);
+            // $data["topic"] = Content::find($id)->topic["topic_name"];
+
+            $topicId = Content::find($id)->topic["id"];
+            $lessonId = Topic::find($topicId)->lesson["id"];
+            $courseId = Lesson::find($lessonId)->course["id"];
+
+            $data = Content::find($id);
+            $data["topic"] = Content::find($id)->topic;
+            $data["lesson"] = Lesson::find($lessonId);
+            $data["course"] = Course::find($courseId);
+
+            $response = [
+                "data" => $data,
+                // "data" => Content::find($id),
+                // "data" => [
+                //     Content::find($id),
+                //     "topic" => Content::find($id)->topic,
+                //     "lesson" => Lesson::find($lessonId),
+                //     "course" => Course::find($courseId)
+                // ],
+                "message" => "success",
+                "status" => 200
+            ];            
         }
 
         return response()->json($response, $response["status"]);

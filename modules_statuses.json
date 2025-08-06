@@ -1,7 +1,5 @@
 {
     "User": true,
     "Course": true,
-    "AdminCourse": true,
-    "AdminUsers": true,
     "AdminUser": true
 }
