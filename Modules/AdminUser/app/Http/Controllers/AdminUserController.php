@@ -8,19 +8,32 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminUserController extends Controller
 {
-    public function showLogin() {
+    public function showLogin()
+    {
         return view('login');
     }
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $credentials = $request->validate([
             'username' => 'required',
             'password' => 'required'
         ]);
-        
+
         if (Auth::guard('admin')->attempt($credentials)) {
             return redirect('/token');
         }
         return back()->withErrors(['username' => 'Username atau password salah.']);
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/login/adm');
     }
     /**
      * Display a listing of the resource.

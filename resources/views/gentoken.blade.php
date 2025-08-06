@@ -16,5 +16,10 @@
         <button type="submit">Generate</button>
     </form>
 
+    <form action="/logout/adm" method="POST">
+        @csrf
+        <button type="submit">Logout</button>
+    </form>
+
 </body>
 </html>

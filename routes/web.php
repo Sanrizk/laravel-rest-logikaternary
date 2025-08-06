@@ -12,7 +12,7 @@ Route::get('/', function () {
 
 Route::get('/token', function () {
     return view('gentoken');
-});
+})->middleware('auth');
 
 // Route::post('/tokens/create', function (Request $request) {
 //     // dd($request->user());
