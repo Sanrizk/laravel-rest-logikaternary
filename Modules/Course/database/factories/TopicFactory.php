@@ -18,7 +18,7 @@ class TopicFactory extends Factory
     {
         return [
             "topic_name" => fake()->name(),
-            "lesson_id" => 1
+            "lesson_id" => 2
         ];
     }
 }

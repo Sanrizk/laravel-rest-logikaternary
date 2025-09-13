@@ -1,11 +1,6 @@
 {
     "User": true,
     "Course": true,
-<<<<<<< HEAD
-    "AdminUser": true
-}
-=======
     "AdminUser": true,
     "Post": true
 }
->>>>>>> Feature/Post
